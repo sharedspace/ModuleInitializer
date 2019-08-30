@@ -1,0 +1,27 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp3.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Mono.Cecil" Version="0.11.0" />
+    <PackageReference Include="System.CommandLine.Experimental" Version="0.3.0-alpha.19405.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\testlib\testlib.csproj">
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <OutputItemType>_testLibPath</OutputItemType>
+    </ProjectReference>
+  </ItemGroup>
+
+  <Target Name="CopyTestLib" AfterTargets="CoreCompile">
+    <Copy SourceFiles="@(_testLibPath)" DestinationFolder="$(OutDir)" />
+  </Target>
+
+  <Target Name="CleanTestLib" AfterTargets="Clean" DependsOnTargets="ResolveReferences">
+    <Delete Files="$(OutDir)%(_testLibPath.FileName)%(_testLibPath.Extension)" />
+  </Target>
+</Project>
